@@ -12,7 +12,7 @@ function nbox_user_customRenderer(noteInstance)
 	var nid = noteInstance.nid;    // note ID, OK to not use, but it exists
 	var text = noteInstance.text;  // note text - this is what you want to render
 
-	var el = document.createElement("p")''
+	var el = document.createElement("p");
 	/*
 		your code here.. do something with "el"ement, fill it w/ text, etc!
 		change its type to div or w/e if you need to!

@@ -1,5 +1,5 @@
 //==========================================================================//
-//====================== BRIGHT MOON CO. NOTEBOX CODE ======================//
+//========================== NOTEBOX MAIN CODE =============================//
 //==========================================================================//
 
 /*
@@ -65,9 +65,16 @@ function nbox_appendNoteToTarget(note, target)
 		return false;
 	var el = nbox_getNoteElement(note);
 	if (SETTING_newFirst)
-		target.insertBefore(el, target.childNodes[0].nextSibling); // insert after the "tostart" move marker
+	{
+		if (GLOBAL_isEditor)
+			target.insertBefore(el, target.childNodes[0].nextSibling); // insert after the "tostart" move marker
+		else
+			target.prepend(el);
+	}
 	else
 		target.appendChild(el);
+		
+		
 	if (GLOBAL_isEditor)
 		el.parentNode.insertBefore(nbox_ed_noteMoveMarkerCreate(note), el.nextSibling);
 	return true;
@@ -95,14 +102,14 @@ function nbox_renderNotes(notes, start=0, end=undefined, target_id=SETTING_targe
 	if (target == null)
 		return;
 
-	for (var x = start; x < end; x++)
-		nbox_appendNoteToTarget(notes[x], target);
-
-	if (start == 0)
+	if (start == 0 && GLOBAL_isEditor)
 	{
 		var note = new Note("freshest", "freshest"); // a marker to move note to the very top, above all other notes
 		target.prepend(nbox_ed_noteMoveMarkerCreate(note));
 	}
+
+	for (var x = start; x < end; x++)
+		nbox_appendNoteToTarget(notes[x], target);	
 }
 
 /*  Converts an array of xml <note> tag structures into an array of Note instances

@@ -1,3 +1,19 @@
+//==========================================================================//
+//================ BRIGHT MOON CO. PAGE TAB SYSTEM CODE ====================//
+//==========================================================================//
+
+/*
+pre-import requirements:
+	none
+
+stylesheet requirements:
+	bmco_pagetabs.css
+*/
+
+//==========================================================================//
+//================================ FUNCTIONS ===============================//
+//==========================================================================//
+
 /* Called onclick of a navbar header on app index,
 switches between activity tabs.
 inputs: tabName <string> [name of the tab, provided in onclick call],
@@ -45,8 +61,6 @@ function bmco_tab_removeAttributeForAllOfClass(classname, attribute)
 	for (var x = 0; x < targets.length; x++)
 		targets[x].removeAttribute(attribute);
 }
-
-
 
 /* Sets some attribute to a value for every DOM element of a class
 inputs: classname <string> [name of assigned class],
