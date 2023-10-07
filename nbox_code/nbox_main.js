@@ -6,6 +6,7 @@
 pre-import requirements:
 	code/bmco_general.js
 	code/bmco_xml.js
+	code/bmco_gui.js
 	code/nbox_settings.js
 	user/renderer.js
 */
@@ -23,90 +24,56 @@ class Note {
   }
 }
 
-
-function nbox_getNoteElementEditor(noteInstance)
-{
-
-	var edit = document.createElement("div");
-	edit.innerHTML = "edit";
-	edit.classList.add("button");
-	edit.setAttribute("onclick", "nbox_ed_noteEdit('"+noteInstance.nid+"')");
-
-	var del = document.createElement("div");
-	del.innerHTML = "delete";
-	del.classList.add("button");
-	del.setAttribute("onclick", "nbox_ed_noteDeleteConfirm('"+noteInstance.nid+"')");
-
-	var p = document.createElement("p");
-	p.innerHTML = noteInstance.text;
-
-	var pwrap = document.createElement("div");
-	pwrap.classList.add("nbox_noteText");
-	pwrap.appendChild(p);
-
-	var div = document.createElement("div");
-	div.classList.add("nbox_note");
-	div.setAttribute("nid", noteInstance.nid);
-	
-	div.appendChild(edit);
-	div.appendChild(del);
-	div.appendChild(pwrap);
-
-
-	return div;
-}
-
 function nbox_getNoteElement(noteInstance)
 {
 	if (GLOBAL_isEditor)
-		return nbox_getNoteElementEditor(noteInstance);
-
+		return nbox_ed_getNoteElementEditor(noteInstance);
 	else if (SETTING_userRenderer)
 		return nbox_customRenderer(noteInstance);
-	
 	var p = document.createElement("p");
 	p.class = "nbox_note";
 	p.innerHTML = noteInstance.text;
+	if (SETTING_textSafe)
+		p.innerHTML = bmco_HTMLEntitiesEncode(noteInstance.text);
 	return p;
 }
 
-function nbox_appendNoteToTarget(note, target_id="nbox_target")
+function nbox_appendNoteToTarget(note, target)
 {
-	var target = document.getElementById(target_id);
 	if (target == null)
-	{
-		console.log("no target found to append notes to");
 		return false;
-	}
+	var el = nbox_getNoteElement(note);
 	if (SETTING_newFirst)
-		target.prepend(nbox_getNoteElement(note));
+		target.insertBefore(el, target.childNodes[0].nextSibling); // insert after the "tostart" move marker
 	else
-		target.appendChild(nbox_getNoteElement(note));
+		target.appendChild(el);
+	if (GLOBAL_isEditor)
+		el.parentNode.insertBefore(nbox_ed_getNoteMoveMarker(note), el.nextSibling);
 	return true;
 }
 
-function nbox_renderNotes(notes, start=0, end=undefined)
+function nbox_renderNotes(notes, start=0, end=undefined, target_id="nbox_target")
 {
 	if (start > notes.length)
-	{
-		console.log("start position exceeds note array length");
-		return false;
-	}
+		return
 
 	if (end == undefined)
 		end = notes.length;
-	else
-	{
-		if (end > notes.length)
-		{
-			console.log("end position exceeds note array length");
-			return false;
-		}
-	}
+	else if (end > notes.length)
+		return;
+	
+	var target = document.getElementById(target_id);
+	if (target == null)
+		return;
 
 	for (var x = start; x < end; x++)
-		nbox_appendNoteToTarget(notes[x]);
-	
+		nbox_appendNoteToTarget(notes[x], target);
+
+	if (start == 0)
+	{
+		var note = new Note("start", "start");
+		target.prepend(nbox_ed_getNoteMoveMarker(note));
+	}
 }
 
 function nbox_notesXmlToNoteInstances(notes)
@@ -120,13 +87,10 @@ function nbox_notesXmlToNoteInstances(notes)
 	return out;
 }
 
-function nbox_startup(file="./files/data.xml")
+function nbox_startup(file="./nbox_files/data.xml")
 {
 	bmco_xml_awaitXmlFromFile(file).then(function(xmldoc){
 		var notes = xmldoc.getElementsByTagName("note");
 		nbox_renderNotes(nbox_notesXmlToNoteInstances(notes));
 	});
 }
-
-
-

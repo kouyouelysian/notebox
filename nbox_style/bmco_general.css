@@ -13,17 +13,20 @@ html, body {
 body {
 	/* vars go here */
 	--page-spacing: 24px;
-	--page-timing: 0.15s;
+	--page-timing: 0.1s;
 
 	--col-background: #fab;
 	--col-body: #fff;
 	--col-dim: #eee;
 	--col-text: #222;
 	--col-accent: #fab;
+	--col-other: #61f;
 	--col-shadow: #bbc;
 
 	--font-big: 'arial';
 	--font-big-size: 32px;
+	--font-med: 'verdana';
+	--font-med-size: 24px;
 	--font-main: 'verdana';
 	--font-main-size: 18px;
 
@@ -99,32 +102,6 @@ hr {
 .success {
 	background-color: #7bffa2;
 }
-
-
-.button {
-	height: calc(var(--buttons-height) - 4px - 4px);
-	border: 4px solid var(--col-accent);
-	position: relative;
-	background-color: var(--col-accent);
-	color: var(--col-body);
-	transition: background-color 0.2s, color 0.2s;
-	display: table-cell;
-	text-align: center;
-	vertical-align: middle;
-	font-family: var(--font-big);
-	font-size: var(--font-big-size);
-	font-style: italic;
-	padding-left: 16px;
-	padding-right: 16px;
-	user-select: none;
-	cursor: pointer;
-}
-
-.button:hover {
-	background-color: var(--col-body);
-	color: var(--col-accent);
-}
-
 
 form {
 	margin-top: var(--page-spacing);

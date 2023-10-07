@@ -5,7 +5,52 @@
 /*
 pre-import requirements:
 	bmco_general.js
+	bmco_gui.js (only for 1 function, see * for bmco_xml_xmldocTextToClipboard)
 */
+
+
+
+
+//==========================================================================//
+//================= AVAILABLE FUNCTIONS AND CLASSES ========================//
+//==========================================================================//
+
+/*
+
+functions:
+
+bmco_xml_xmldocFromString(text)
+bmco_xml_xmldocToString(xmldoc) 
+bmco_xml_xmldocTextToClipboard(xmldoc, gui=true) *PRE-IMPORT bmco_gui.js, should be called from onclick
+
+bmco_xml_awaitXmlFromFile(fname)
+bmco_xml_httpRequest(fname)
+
+bmco_xml_nodeTextCreate(xmldoc, elem, text="")
+bmco_xml_nodeTextWrite(xmldoc, node, text)
+bmco_xml_nodeTextRead(node, emptyStringOnFail=true)
+
+bmco_xml_childTagExists(node, tag)
+bmco_xml_childTagGetChildren(node, tag)
+bmco_xml_childTagGetChildrenValues(node, tag)
+bmco_xml_childTagRead(node, tag)
+bmco_xml_ChildTagWrite(xmldoc, node, tag, text)
+
+bmco_xml_nodeGetByChildTagValue(xmldoc, nodeTag, childTag, value)
+bmco_xml_nodeAndChildrenWithTextConstruct(xmldoc, nodeTag, childTagValuePairs)
+bmco_xml_nodeDeleteByChildTagText(xmldoc, nodeTag, childTag, value)
+bmco_xml_nodePutTo(xmldoc, nodeTag, childTag, movedValue, targetValue, position)
+bmco_xml_nodePutBefore(xmldoc, nodeTag, childTag, movedValue, targetValue)
+bmco_xml_nodePutAfter(xmldoc, nodeTag, childTag, movedValue, targetValue)
+bmco_xml_nodePutAtStart(xmldoc, nodeTag, childTag, movedValue)
+
+classes:
+
+bmco_TagValuePair
+
+*/
+
+
 
 //==========================================================================//
 //=============================== CLASSES ==================================//
@@ -45,23 +90,53 @@ class bmco_TagValuePair {
 //================================ FUNCTIONS ===============================//
 //==========================================================================//
 
+/* Creates an XML document out of some valid text
+inputs: text <string> [text of a valid xml document]
+return: <xml document object>
+ */
+function bmco_xml_xmldocFromString(text)
+{
+	var parser = new DOMParser();
+	var xmldoc = parser.parseFromString(text, "text/xml");
+	return xmldoc;
+}
 
 /* returns the contents of an xml document object as a string
 inputs: xmldoc <xml document object> [source xml]
 return: string;
 */
-function myag_ed_xml_xmldocDumpToString(xmldoc)
+function bmco_xml_xmldocToString(xmldoc)
 {
 	return new XMLSerializer().serializeToString(xmldoc.documentElement);
+}
+
+/* Puts the current XML text to user's text clipboard.
+inputs: none
+outputs: none
+*/
+function bmco_xml_xmldocTextToClipboard(xmldoc, gui=true)
+{
+	var xml = bmco_xml_xmldocToString(xmldoc);
+
+	navigator.clipboard.writeText(xml).then(() => {
+		if (gui)
+    		bmco_gui_popupAlert('raw XML copied');
+	})
+	.catch(err => {
+		if (gui)
+			bmco_gui_popupAlert('Could not copy, tell Aubery about this ASAP: ' + err);
+		else
+			console.log("copy to clipboard fail!");
+	});
 }
 
 
 async function bmco_xml_awaitXmlFromFile(fname) {
   try {
-    let xmlText = await bmco_xml_promiseXml(fname);
+    let xmlText = await bmco_xml_httpRequest(fname);
     xmlText = xmlText.replace(/>\s*/g, '>');  // Replace "> " with ">"
     xmlText = xmlText.replace(/\s*</g, '<');  // Replace "< " with "<"
-    return bmco_xml_xmldoc(bmco_replaceAllInString(xmlText, /[\n\r\t]/g));
+    return bmco_xml_xmldocFromString(bmco_replaceAllInString(xmlText, /[\n\r\t]/g));
   } catch (err) {
     console.log(err)
   }
@@ -70,7 +145,7 @@ async function bmco_xml_awaitXmlFromFile(fname) {
 // part of myag_checkXmlLoaded - sends an xhr and promises to myag_waitForXml it will come back
 // thank you Blunt Jackson
 // https://overclocked.medium.com/truly-understanding-javascript-promises-await-and-async-f3f51e283554
-async function bmco_xml_promiseXml(fname)
+async function bmco_xml_httpRequest(fname)
 {
   var xhr = new XMLHttpRequest();
   return new Promise(function(resolve, reject)
@@ -88,17 +163,6 @@ async function bmco_xml_promiseXml(fname)
     xhr.open('GET', fname, true)
     xhr.send();
   });
-}
-
-/* Creates an XML document out of some valid text
-inputs: text <string> [text of a valid xml document]
-return: <xml document object>
- */
-function bmco_xml_xmldoc(text)
-{
-	var parser = new DOMParser();
-	var xmldoc = parser.parseFromString(text, "text/xml");
-	return xmldoc;
 }
 
 /* Creates an xml node with some text inside of it.
@@ -251,7 +315,7 @@ inputs: xmldoc <xml document object> [operational xml object],
 			child nodes to be appended]
 return: <xml element> nodeTag node with specified child nodes appended
 */
-function bmco_xml_nodeConstruct(xmldoc, nodeTag, childTagValuePairs)
+function bmco_xml_nodeAndChildrenWithTextConstruct(xmldoc, nodeTag, childTagValuePairs)
 {
 	var node = xmldoc.createElement(nodeTag);
 	for (var x = 0; x < childTagValuePairs.length; x++)
@@ -267,14 +331,38 @@ inputs: xmldoc <xml document object> [operational xml object],
 		value <string> [value of childTag to match for]
 return: none
 */
-function myag_ed_nodeDelete(xmldoc, nodeTag, childTag, value)
+function bmco_xml_nodeDeleteByChildTagText(xmldoc, nodeTag, childTag, value)
 {
 	var target = bmco_xml_nodeGetByChildTagValue(xmldoc, nodeTag, childTag, value);
 	target.parentNode.removeChild(target);
 }
 
 /* Used for reordering tags of the same name inside a parent tag. Moves one tag of some name
-after another of the same name, locating by their child tags' values.
+before or after another of the same name, locating by their child tags' values.
+inputs: xmldoc <xml document object> [operational xml object],
+		nodeTag <string> [name of the target parent tag]
+		childTag <string> [name of the child tags whose value are being considered],
+		movedValue <string> [value of childTag belonging to the moved nodeTag],
+		targetValue <string> [value of childTag belonging to the nodeTag we're putting the other one after],
+		position <string "before" or "after"> [desired position relative to target tag]
+return: none
+*/
+function bmco_xml_nodePutTo(xmldoc, nodeTag, childTag, movedValue, targetValue, position)
+{
+	if (targetValue == "start")
+		bmco_xml_nodePutAtStart(xmldoc, nodeTag, childTag, movedValue);
+	else
+	{
+		var moved = bmco_xml_nodeGetByChildTagValue(xmldoc, nodeTag, childTag, movedValue);
+		var target = bmco_xml_nodeGetByChildTagValue(xmldoc, nodeTag, childTag, targetValue);
+		if (position == "after")
+			moved.parentNode.insertBefore(moved, target.nextSibling);
+		else if (position == "before")
+			moved.parentNode.insertBefore(moved, target);
+	}	
+}
+
+/* "after" bmco_xml_nodePutTo wrapper
 inputs: xmldoc <xml document object> [operational xml object],
 		nodeTag <string> [name of the target parent tag]
 		childTag <string> [name of the child tags whose value are being considered],
@@ -284,14 +372,20 @@ return: none
 */
 function bmco_xml_nodePutAfter(xmldoc, nodeTag, childTag, movedValue, targetValue)
 {
-	if (targetValue == "start")
-		bmco_xml_nodePutAtStart(xmldoc, nodeTag, childTag, movedValue);
-	else
-	{
-		var moved = bmco_xml_nodeGetByChildTagValue(xmldoc, nodeTag, childTag, movedValue);
-		var target = bmco_xml_nodeGetByChildTagValue(xmldoc, nodeTag, childTag, targetValue);
-		moved.parentNode.insertBefore(moved, target.nextSibling);
-	}	
+	bmco_xml_nodePutTo(xmldoc, nodeTag, childTag, movedValue, targetValue, "after");
+}
+
+/* "before" bmco_xml_nodePutTo wrapper
+inputs: xmldoc <xml document object> [operational xml object],
+		nodeTag <string> [name of the target parent tag]
+		childTag <string> [name of the child tags whose value are being considered],
+		movedValue <string> [value of childTag belonging to the moved nodeTag],
+		targetValue <string> [value of childTag belonging to the nodeTag we're putting the other one after]
+return: none
+*/
+function bmco_xml_nodePutBefore(xmldoc, nodeTag, childTag, movedValue, targetValue)
+{
+	bmco_xml_nodePutTo(xmldoc, nodeTag, childTag, movedValue, targetValue, "before");
 }
 
 /* Used for reordering tags of the same name inside a parent tag. Moves a tag of some name
@@ -307,3 +401,20 @@ function bmco_xml_nodePutAtStart(xmldoc, nodeTag, childTag, movedValue)
 	var moved = bmco_xml_nodeGetByChildTagValue(xmldoc, nodeTag, childTag, movedValue);
 	moved.parentNode.prepend(moved);
 }
+
+/* Used for reordering tags of the same name inside a parent tag. Moves a tag of some name
+to the end of its parent tag (after all its other children).
+inputs: xmldoc <xml document object> [operational xml object],
+		nodeTag <string> [name of the target parent tag]
+		childTag <string> [name of the child tags whose value are being considered],
+		movedValue <string> [value of childTag belonging to the moved nodeTag]
+return: none
+*/
+function bmco_xml_nodePutAtEnd(xmldoc, nodeTag, childTag, movedValue)
+{
+	var moved = bmco_xml_nodeGetByChildTagValue(xmldoc, nodeTag, childTag, movedValue);
+	moved.parentNode.append(moved);
+}
+
+
+

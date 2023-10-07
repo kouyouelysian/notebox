@@ -1,0 +1,92 @@
+
+body {
+	--navbar-height: 32px;
+	--navbar-drag-length: 10px;
+}
+
+#fastNoteText {
+	display: block;
+	margin-bottom: calc(var(--page-spacing) / 2);
+	width: calc(100% - 10px);
+	font-family: var(--font-big);
+	font-size: var(--font-med-size);
+	padding: 4px;
+	border: 1px solid var(--col-accent);
+}
+
+.nbox_note {
+	
+	margin-bottom: var(--page-spacing);
+}
+
+.nbox_noteMoveMarker {
+	padding: var(--page-spacing);
+	color: var(--col-accent);
+	border: 2px dashed var(--col-accent);
+
+	
+	margin-bottom: var(--page-spacing);
+	position: relative;
+	cursor: pointer;
+
+	display: none;
+}
+
+.nbox_noteMoveMarker:hover {
+	color: var(--col-other);
+	border-color: var(--col-other);
+}
+
+.nbox_noteMoveMarker:active {
+	filter: brightness(0.7);
+}
+
+
+.nbox_noteMoveMarker p {
+	padding: 0;
+	margin: 0;
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
+	width: 100%;
+	text-align: center;
+	height: 0;
+	line-height: 0;
+	color: inherit;
+}
+
+
+.nbox_note .nbox_noteText {
+	border: 2px solid var(--col-accent);
+	padding: var(--page-spacing);
+	width: calc(100% - var(--page-spacing) - var(--page-spacing) - 4px);
+	max-height: 150px;
+	overflow-y: scroll;
+	position: relative;
+	scrollbar-width: none;
+}
+
+.nbox_note .nbox_noteText::-moz-scrollbar {
+    display: none; 
+}
+
+.nbox_noteText p {
+	margin-bottom: 0;
+}
+
+.nbox_note .button {
+	font-size: 20px;
+	height: 24px;
+	border-width: 2px;
+	border-bottom: 0;
+	border-collapse: collapse;
+}
+
+#nbox_target {
+	margin-top: var(--page-spacing);
+	position: relative;
+}
+
+
+
+

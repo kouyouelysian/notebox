@@ -256,3 +256,19 @@ function bmco_makeIdBase()
 {
   return bmco_timestamp()+"_"+bmco_randString(5);
 }
+
+/* open a url from string
+inputs: url <string> [valid URL to visit],
+		blank <bool> [true = in new tab, false = in this tab]
+return: none
+*/
+function bmco_urlOpen(url, blank=true)
+{
+	var a = document.createElement("a");
+	if (blank)
+		a.setAttribute("target", "_blank");
+	a.setAttribute("href", url);
+	document.body.appendChild(a);
+	a.click();
+	a.remove();
+}
