@@ -21,7 +21,7 @@ body {
 
 .nbox_noteMoveMarker {
 	padding: var(--page-spacing);
-	color: var(--col-accent);
+	color: transparent;
 	border: 2px dashed var(--col-accent);
 
 	
@@ -86,7 +86,3 @@ body {
 	margin-top: var(--page-spacing);
 	position: relative;
 }
-
-
-
-

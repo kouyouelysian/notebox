@@ -5,7 +5,26 @@
 /*
 pre-import requirements:
 	none
+
+available functions:
+	bmco_replaceAllInString(arg, target, replace="")
+	bmco_HTMLEntitiesEncode(arg)
+	bmco_HTMLEntitiesDecode(arg)
+	bmco_arrayHas(array, item)
+	bmco_arrayRemoveValue(arr, value)
+	bmco_randString(n)
+	bmco_getParamRead(arg)
+	bmco_getParamWrite(param, value)
+	bmco_getParamDelete(arg)
+	bmco_setTitle(arg)
+	bmco_removeIfExists(id)
+	bmco_badcharsPresent(arg, badchars)
+	bmco_badcharsAsString(badchars)
+	bmco_timestamp()
+	bmco_makeIdBase()
+	bmco_urlOpen(url, blank=true)
 */
+
 
 //==========================================================================//
 //================================ FUNCTIONS ===============================//

@@ -8,6 +8,11 @@
 // when you edit the 'data.xml' document!
 SETTING_neocitiesXmlFileEditLink    = "https://elysiantunes.bandcamp.com/";
 
+// ID of a <div> (or other element) to append your notes as children to.
+SETTING_targetId = "nbox_target";
+
+
+
 //===========EDIT IF YOU WANT - DEFAULT SETTINGS ARE OK===========//
 
 // display newer notes above older notes. Set to false to have things vice versa.

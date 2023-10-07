@@ -1,11 +1,25 @@
-/*========================================================*/
+//==========================================================================//
+//=============== BRIGHT MOON CO. GUI DRIVING FUNCTIONS ====================//
+//==========================================================================//
 
-//  this is ADD-ON CODE to add pop-ups to the project!
-//  it requires "bmco_general.js" added BEFORE itself in
-//  document's BODY end! Required style -> "bmco_popup.css"
+/*
+pre-import requirements:
+	bmco_general.js
 
-/*========================================================*/
+style requirements:
+	bmco_gui.css
 
+only to be used as an ez buttons+popups addon for existing projects
+*/
+
+//==========================================================================//
+//================================ FUNCTIONS ===============================//
+//==========================================================================//
+
+/*  Hides any opened interactive windows, like popups or fillouts.
+inputs: none
+return: none 
+*/
 function bmco_gui_hideAny()
 {
 	popups = document.getElementsByClassName("popup");
@@ -46,6 +60,11 @@ function bmco_gui_backdropRemove(backdropId="guiBackdrop")
 
 /*-------------------------------- button --------------------------------*/
 
+/*  Creates HTML for a standard clickable button
+inputs: text <string> [text to be displayed in the button, e.g. "OK"],
+		fn <string> [function to be put into button's onclick event, e.g. "alert(1)"]
+return: <HTML element> [ready-to-append button]
+*/
 function bmco_gui_buttonCreate(text, fn)
 {
 	var button = document.createElement("div");
@@ -58,7 +77,7 @@ function bmco_gui_buttonCreate(text, fn)
 
 /*-------------------------------- popup --------------------------------*/
 
-/* Adds a button to popup's button zone
+/*  Adds a button to popup's button zone
 inputs: text <string> [text to be put into the paragraph],
 		fn <string> [function to be executed upon clicking the button]
 return: none
@@ -77,16 +96,10 @@ function bmco_gui_popupAddButton(popup, text, fn)
 	if (target == null)
 		return;
 
-	/*var button = document.createElement("p");
-	button.innerHTML = text;
-	if (fn != undefined)
-		button.setAttribute("onclick", fn);
-	button.classList.add("button");*/
-
 	target.appendChild(bmco_gui_buttonCreate(text, fn));
 }
 
-/* closes any generated popup, if there is one
+/*  closes any generated popup, if there is one
 inputs: none
 return: none
 */
@@ -97,7 +110,7 @@ function bmco_gui_popupClose()
 	bmco_removeIfExists("popupSelect");
 }
 
-/* creates the default popup body to which buttons have to be appended
+/*  creates the default popup body to which buttons have to be appended
 inputs: text <string> [popup message text],
 		id <string, optional> [if set - the popup window id]
 return: <html element>
@@ -118,7 +131,7 @@ function bmco_gui_popupCreatePopupBody(text, id=undefined)
 	return popup;
 }
 
-/* Throws an alert message on-screen that can be closed by pressing
+/*  Throws an alert message on-screen that can be closed by pressing
 "OK" - a fancy substitute for the built-in "alert(arg)" method
 inputs: message <string> [alert message text]
 		text <string, optional> [text to be displayed on the button],
@@ -134,7 +147,7 @@ function bmco_gui_popupAlert(message, fn="bmco_gui_popupClose()", text="OK")
 	return alertDiv;
 }
 
-/* Throws a select prompt message on-screen that can disappears when
+/*  Throws a select prompt message on-screen that can disappears when
 the user chooses one of the two options.
 inputs: message <string> [select prompt text],
 		text1 <string> [text on the left button],
@@ -155,26 +168,34 @@ function bmco_gui_popupConfirm(message, fn1, text1="YES", fn2="bmco_gui_popupClo
 
 /*-------------------------------- bottombar --------------------------------*/
 
-function bmco_gui_getBottomBarElement(id)
-{
-	return document.getElementById(id);
-}
-
+/*  Clears all buttons from a .bottombar div
+inputs: id <string> [element ID of .bottombar div to be cleaned up]
+return: <bool> [success or not]
+*/
 function bmco_gui_bottomBarClear(id)
 {
-	var target = bmco_gui_getBottomBarElement(id);
+	var target = document.getElementById(id);
 	if (!target)
 		return false;
 	target.innerHTML = "";
 	return true;
 }
 
+/*  Is used to populate a .bottombar <div> with buttons
+inputs: buttonTuples <Array[ ["name", "function()"], ...> [Information on
+		the buttons that should be created. Array of arrays. Each child array
+		should contain 2 strings: text displayed on the button (e.g. "OK"), and
+		text to be put to the onclick attribute, usually a JS function (e.g.
+		"alert(1)") ],
+		id <string> [element ID of .bottombar div to be cleaned up]
+return: none
+*/
 function bmco_gui_bottomBarPopulate(buttonTuples, id)
 {
 	if (!(bmco_gui_bottomBarClear(id)))
 		return;
 
-	var target = bmco_gui_getBottomBarElement(id);
+	var target = document.getElementById(id);
 	if (!target)
 		return;
 
@@ -188,6 +209,10 @@ function bmco_gui_bottomBarPopulate(buttonTuples, id)
 
 /*-------------------------------- fillout --------------------------------*/
 
+/*  Show a fill-out form by its id. Comes with a backdrop and everything
+inputs: id <string> [id of a .fillout class div]
+return: none
+*/
 function bmco_gui_filloutShow(id)
 {
 	var target = document.getElementById(id);
@@ -197,16 +222,15 @@ function bmco_gui_filloutShow(id)
 	target.style.display = "block";
 }
 
+/*  Hide a fill-out form by its id. Deletes the backdrop
+inputs: id <string> [id of a .fillout class div]
+return: none
+*/
 function bmco_gui_filloutHide(id)
 {
 	var target = document.getElementById(id);
 	if (target == undefined)
 		return;
-
 	bmco_gui_backdropRemove();
 	target.removeAttribute("style");
 }
-
-
-
-
