@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>NoteBox editor</title>
+	<link rel="stylesheet" type="text/css" href="./style/bmco_general.css">
+	<link rel="stylesheet" type="text/css" href="./style/bmco_popup.css">
+	<link rel="stylesheet" type="text/css" href="./style/editor.css">
+</head>
+<body>
+	<div id="mainWrapper">
+
+		<div id="navbar">
+			<p class="navbarOption" onclick="nbox_ed_tabSwitchTo('notes', this)" id="navbarSelected">Notes</p>
+			<p class="navbarOption" onclick="nbox_ed_tabSwitchTo('settings', this)">Settings</p>
+		</div>
+
+
+		<div class="tab section" id="notes" style="display: block;">
+			<h1>Your notes:</h1>
+			<div class="button" id="newNoteButton" onclick="nbox_ed_noteAdd()">New note...</div>
+			<div id="nbox_target">
+			</div>
+		</div>
+
+		<div class="tab section" id="settings">
+			Nothing yet
+		</div>
+
+
+	</div>
+
+	<script type="text/javascript" src="user/settings.js"></script>
+	<script type="text/javascript" src="code/bmco_general.js"></script>
+	<script type="text/javascript" src="code/bmco_xml.js"></script>
+	<script type="text/javascript" src="code/bmco_popup.js"></script>
+	<script type="text/javascript" src="code/nbox_main.js"></script>
+	<script type="text/javascript" src="code/nbox_editor.js"></script>
+	<script type="text/javascript">nbox_ed_startup();</script>
+
+
+</body>
+</html>
