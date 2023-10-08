@@ -23,6 +23,7 @@ available functions:
 	bmco_timestamp()
 	bmco_makeIdBase()
 	bmco_urlOpen(url, blank=true)
+	bmco_parseIntSafe(arg)
 */
 
 
@@ -290,4 +291,17 @@ function bmco_urlOpen(url, blank=true)
 	document.body.appendChild(a);
 	a.click();
 	a.remove();
+}
+
+
+/*  safely parse a string into an integer
+inputs: arg <string> [integerlike string] 
+return: <integer> [parsed number] or <false>
+*/
+function bmco_parseIntSafe(arg)
+{
+	var ret = parseInt(arg);
+	if (isNaN(ret))
+		return 0;
+	return ret;
 }

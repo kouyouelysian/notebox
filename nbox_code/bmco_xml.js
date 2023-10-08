@@ -5,12 +5,11 @@
 /*
 pre-import requirements:
 	bmco_general.js
-	bmco_gui.js (only for 1 function, see * for bmco_xml_xmldocTextToClipboard)
 
 available functions:
 	bmco_xml_xmldocFromString(text)
 	bmco_xml_xmldocToString(xmldoc) 
-	bmco_xml_xmldocTextToClipboard(xmldoc, gui=true) *PRE-IMPORT bmco_gui.js, should be called from onclick
+	bmco_xml_xmldocTextToClipboard(xmldoc, gui=true)
 	bmco_xml_awaitXmlFromFile(fname)
 	bmco_xml_httpRequest(fname)
 	bmco_xml_nodeTextCreate(xmldoc, elem, text="")
@@ -21,6 +20,7 @@ available functions:
 	bmco_xml_childTagGetChildrenValues(node, tag)
 	bmco_xml_childTagRead(node, tag)
 	bmco_xml_ChildTagWrite(xmldoc, node, tag, text)
+	bmco_xml_noteGetFirstOfTag(xmldoc, nodeTag)
 	bmco_xml_nodeGetByChildTagValue(xmldoc, nodeTag, childTag, value)
 	bmco_xml_nodeAndChildrenWithTextConstruct(xmldoc, nodeTag, childTagValuePairs)
 	bmco_xml_nodeDeleteByChildTagText(xmldoc, nodeTag, childTag, value)
@@ -93,21 +93,17 @@ function bmco_xml_xmldocToString(xmldoc)
 
 /*  Puts the current XML text to user's text clipboard.
 inputs: none
-outputs: none
+outputs: <bool> [success or not]
 */
 function bmco_xml_xmldocTextToClipboard(xmldoc, gui=true)
 {
 	var xml = bmco_xml_xmldocToString(xmldoc);
 
 	navigator.clipboard.writeText(xml).then(() => {
-		if (gui)
-			bmco_gui_popupAlert('raw XML copied');
+		return true;
 	})
 	.catch(err => {
-		if (gui)
-			bmco_gui_popupAlert('Could not copy, tell Aubery about this ASAP: ' + err);
-		else
-			console.log("copy to clipboard fail!");
+		return false;
 	});
 }
 
@@ -278,6 +274,19 @@ return: none
 	target = childrenOfTagName[0];
 	bmco_xml_nodeTextWrite(xmldoc, target, text);
  }
+
+/*  Fetches the first found instance of a given tag in an xml document
+inputs: xmldoc <xml document object> [operational xml object],
+		nodeTag <string> [name of the target parent tag]
+return: <xml element> or null if not found
+*/
+function bmco_xml_noteGetFirstOfTag(xmldoc, nodeTag)
+{
+	var tags = xmldoc.getElementsByTagName(nodeTag);
+	if (!tags)
+		return null;
+	return tags[0];
+}
 
 /*  Fetches the first found instance of a tag in an xml document which has
 a child tag with some particular inner text value. Null on fail.

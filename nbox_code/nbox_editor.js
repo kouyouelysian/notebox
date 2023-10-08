@@ -16,6 +16,7 @@ pre-import requirements:
 //==========================================================================//
 
 GLOBAL_xmldoc = undefined;
+GLOBAL_updateCount = undefined;
 GLOBAL_isEditor = true; // overrides nbox_main.js global
 SETTING_newFirst = true; // overrides user's selection
 SETTING_targetId = "nbox_target"; // overrides user's selection
@@ -116,7 +117,7 @@ function nbox_ed_noteAdd(text=undefined)
 	var text = new bmco_TagValuePair("text", note.text);
 	var nid = new bmco_TagValuePair("nid", note.nid);
 	var noteXml = bmco_xml_nodeAndChildrenWithTextConstruct(GLOBAL_xmldoc, "note", [text, nid]);
-	GLOBAL_xmldoc.childNodes[0].appendChild(noteXml);
+	bmco_xml_noteGetFirstOfTag(GLOBAL_xmldoc, "notes").appendChild(noteXml);
 	nbox_appendNoteToTarget(note, document.getElementById("nbox_target"));
 	bmco_gui_filloutHide("noteTextFillout");
 }
@@ -248,10 +249,15 @@ function nbox_ed_moveMarkersVisible(visible)
 inputs: none
 return: none
 */
-function nbox_ed_updateXml()
+function nbox_ed_updateXml(openWebEditor=true)
 {
+	bmco_xml_nodeTextWrite(GLOBAL_xmldoc, bmco_xml_noteGetFirstOfTag(GLOBAL_xmldoc, "updateCount"), String(GLOBAL_updateCount+1));
+	bmco_xml_nodeTextWrite(GLOBAL_xmldoc, bmco_xml_noteGetFirstOfTag(GLOBAL_xmldoc, "updateTimestamp"), bmco_timestamp());	
 	bmco_xml_xmldocTextToClipboard(GLOBAL_xmldoc, gui=false);
-	bmco_urlOpen(SETTING_neocitiesXmlFileEditLink);
+	if (openWebEditor)
+		bmco_urlOpen(SETTING_neocitiesXmlFileEditLink);
+	else // "copy raw xml" button
+		bmco_gui_popupAlert('raw XML copied');
 }
 
 /*  loads correct buttons into the main bottom bar.
@@ -264,7 +270,7 @@ function nbox_ed_bottombarLoad(mode="normal", nid=undefined)
 
 	if (mode == "normal")
 	{
-		nameFnTuples.push(["Copy XML", "bmco_xml_xmldocTextToClipboard(GLOBAL_xmldoc)"]);
+		nameFnTuples.push(["Copy XML", "nbox_ed_updateXml(false)"]);
 		nameFnTuples.push(["Update XML", "nbox_ed_updateXml()"]);
 	}
 	else if (mode == "moving")
@@ -320,5 +326,6 @@ function nbox_ed_startup(file="./nbox_files/data.xml")
 		var notes = xmldoc.getElementsByTagName("note");
 		nbox_renderNotes(nbox_notesXmlToNoteInstances(notes));
 		GLOBAL_xmldoc = xmldoc;
+		GLOBAL_updateCount = bmco_parseIntSafe(bmco_xml_nodeTextRead(bmco_xml_noteGetFirstOfTag(xmldoc, "updateCount")));
 	});
 }
