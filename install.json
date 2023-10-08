@@ -3,11 +3,12 @@
 		"makeIndex"
 	],
 	"items_remote": [
-		"nbox_code/bmco_general.js",
-		"nbox_code/nbox_main.js",
-		"nbox_files/data.xml",
 		"nbox_user/renderer.js",
 		"nbox_user/settings.js",
+		"nbox_code/bmco_general.js",
+		"nbox_code/nbox_main.js",
+		"nbox_code/nbox_xml.js",
+		"nbox_files/data.xml",
 		"nbox_style/index.css *if* makeIndex",
 		"index.html *if* makeIndex"
 	],
