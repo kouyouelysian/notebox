@@ -1,17 +1,22 @@
 {
+	"settings": [
+		"makeIndex"
+	],
 	"items_remote": [
-		"",
-		"- .gitignore",
-		"- LICENSE",
-		"- README.md",
-		"- editor.html",
-		"- nbox_code/nbox_editor.js",
-		"- nbox_code/bmco_xml.js",
-		"- nbox_code/bmco_popup.js",
-		"- nbox_code/bmco_pagetabs.js",
-		"- nbox_style",
+		"nbox_code/bmco_general.js",
+		"nbox_code/nbox_main.js",
+		"nbox_files/data.xml",
+		"nbox_user/renderer.js",
+		"nbox_user/settings.js",
+		"nbox_stle/main.css *if* makeIndex",
+		"index.css *if* makeIndex",
 	],
 	"items_local": [
+		"nbox_code",
+		"- nbox_code/main.css",
+		"nbox_files",
+		"nbox_style/editor.css",
+		"nbox_user/settings.js"
 		"editor.html"
 	]
 }
