@@ -19,8 +19,8 @@ SETTING_targetId = "nbox_target";
 // does not affect editor view! editor always displays newest first.
 SETTING_newFirst = true;
 
-// set to "true" if you want to write your own renderer function at user/code.js
-SETTING_userRenderer = false;
-
 // forces html entity encoding. 'false' if you want to use tags like <b> your text. At your own risk!
 SETTING_textSafe = true;
+
+// set to "true" if you want to write your own renderer function at user/code.js
+SETTING_userRenderer = false;

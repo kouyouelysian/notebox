@@ -1,6 +1,11 @@
 /*
 	You can write your own renderer for notes here! This means, you can define the exact
 	HTML structure that will be created for every note, and appended to the target as a child.
+
+	TO ENABLE THE CUSTOM RENDERER:
+	- go to /user/settings.js (sits next to this file)
+	- set SETTING_userRenderer to true instead of false
+	- now the rendering function calls the function below instead of the default one
 */
 
 /*  custom renderer function for your notebox
