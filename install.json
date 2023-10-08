@@ -16,7 +16,7 @@
 		"- nbox_code/main.css",
 		"nbox_files",
 		"nbox_style/editor.css",
-		"nbox_user/settings.js"
+		"nbox_user/settings.js",
 		"editor.html"
 	]
 }
