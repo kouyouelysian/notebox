@@ -1,4 +1,4 @@
-# NoteBox (NBox)
+# NoteBox (NBox) [PRE-ALPHA, TESTING ONLY!!!]
 
 ## WHAT, WHY, WHERE
 
