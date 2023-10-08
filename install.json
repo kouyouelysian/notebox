@@ -8,8 +8,8 @@
 		"nbox_files/data.xml",
 		"nbox_user/renderer.js",
 		"nbox_user/settings.js",
-		"nbox_stle/main.css *if* makeIndex",
-		"index.css *if* makeIndex"
+		"nbox_style/main.css *if* makeIndex",
+		"index.html *if* makeIndex"
 	],
 	"items_local": [
 		"nbox_code",
