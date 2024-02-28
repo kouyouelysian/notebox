@@ -1,23 +1,23 @@
 {
-	"settings": [
-		"makeIndex"
-	],
-	"items_remote": [
-		"nbox_user/renderer.js",
-		"nbox_user/settings.js",
-		"nbox_code/bmco_general.js",
-		"nbox_code/bmco_xml.js",
-		"nbox_code/nbox_main.js",
-		"nbox_files/data.xml",
-		"nbox_style/index.css *if* makeIndex",
-		"index.html *if* makeIndex"
-	],
-	"items_local": [
-		"nbox_code",
-		"- nbox_code/index.css",
-		"nbox_files",
-		"nbox_style",
-		"nbox_user/settings.js",
-		"editor.html"
-	]
+    "settings": [
+        "makeIndex"
+    ],
+    "items_remote": [
+        "nbox_user/renderer.js",
+        "nbox_user/settings.js",
+        "nbox_code/bmco_general.js",
+        "nbox_code/bmco_xml.js",
+        "nbox_code/nbox_main.js",
+        "nbox_files/data.xml",
+        "nbox_style/index.css *if* makeIndex",
+        "index.html *if* makeIndex"
+    ],
+    "items_local": [
+        "nbox_code",
+        "- nbox_code/index.css",
+        "nbox_files",
+        "nbox_style",
+        "nbox_user/settings.js"
+    ],
+    "editor_page": "editor.html"
 }
