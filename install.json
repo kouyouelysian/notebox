@@ -14,7 +14,7 @@
     ],
     "items_local": [
         "nbox_code/nbox_editor.js",
-        "nbox_style/nbox_editor.css",
+        "nbox_style/editor.css",
         "nbox_user/settings.js",
         "info.json"
     ],
