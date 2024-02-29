@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>NoteBox / editor</title>
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='common/style/bmco_general.css') }}" />
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='common/style/bmco_pagetabs.css') }}" />
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='common/style/bmco_gui.css') }}" />
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='editor/bmco_notebox/nbox_style/editor.css') }}" />
+</head>
+<body chid="{{ chid }}">
+	<div id="mainWrapper">
+
+		<div id="navbar">
+			<p class="navbarOption" onclick="bmco_tab_switchTo('fast', this)" id="navbarSelected">Quick note</p>
+			<p class="navbarOption" onclick="bmco_tab_switchTo('editor', this)">Full editor</p>
+			<p class="navbarOption" onclick="bmco_tab_switchTo('settings', this)">Settings</p>
+		</div>
+
+		<div class="tab section" id="fast" style="display: block;">
+			<h1>Make a note!</h1>
+			<p>Use this page to quickly post a new note. After you finish writing, click the "update now" button. The editor will copy the XML (database) to your clipboard and open a web-editor for your XML database file. Simply delete everything and replace with what's in your clipboard!</p>
+			<textarea id="fastNoteText"></textarea>
+			<div class="button" id="newNoteButton" onclick="nbox_ed_noteFast()">Post!</div>
+		</div>
+
+		<div class="tab section" id="editor">
+			<h1>Edit your notes</h1>
+			<p>Change, rearrange, delete, or create new notes here. NB: the notes are displayed here in "newest first" order, even if you changed "SETTING_newFirst" to "true". This means, if you have your display mode set to older first, to make a note appear on top, you have to move it to the very bottom here!</p>
+			<div class="button" id="newNoteButton" onclick="nbox_ed_filloutLoad('new')">New note...</div>
+			<div id="nbox_target"></div>
+			<div class="bottombar mainBottombar" id="mainBottomBar"></div>
+		</div>
+
+		<div class="tab section" id="settings">
+			<h1>Settings</h1>
+			<p>nothing so far, sorry!</p>
+		</div>
+
+	</div>
+
+
+	<div class="fillout" id="noteTextFillout">
+		<p>Note text</p>
+		<textarea id="noteText"></textarea>
+		<hr>
+		<div class="bottombar" id="filloutBottomBar">
+		</div>
+	</div>
+
+	<input type="hidden" name="movedNoteIdHack" id="movedNoteId">
+
+	<!--scripts start-->
+	<script type="text/javascript" src="{{ url_for('static', filename='editor/bmco_notebox/nbox_user/settings.js') }}" ></script>
+	<script type="text/javascript" src="{{ url_for('static', filename='common/code/bmco_general.js') }}" ></script>
+	<script type="text/javascript" src="{{ url_for('static', filename='common/code/bmco_xml.js') }}" ></script>
+	<script type="text/javascript" src="{{ url_for('static', filename='common/code/bmco_gui.js') }}" ></script>
+	<script type="text/javascript" src="{{ url_for('static', filename='common/code/bmco_pagetabs.js') }}" ></script>
+	<script type="text/javascript" src="{{ url_for('static', filename='editor/bmco_notebox/nbox_code/nbox_main.js') }}" ></script>
+	<script type="text/javascript" src="{{ url_for('static', filename='editor/bmco_notebox/nbox_code/nbox_editor.js') }}" ></script>
+	<script type="text/javascript">nbox_ed_startup("{{ remote_database }}");</script>
+	<!--scripts end-->
+
+</body>
+</html>

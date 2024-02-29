@@ -18,6 +18,8 @@ pre-import requirements:
 GLOBAL_xmldoc = undefined;
 GLOBAL_updateCount = undefined;
 GLOBAL_isEditor = true; // overrides nbox_main.js global
+GLOBAL_isOffline = true; // indicates if the editor is online. should be overridden
+                         // as "false" in the online version after including the script
 SETTING_newFirst = true; // overrides user's selection
 SETTING_targetId = "nbox_target"; // overrides user's selection
 
@@ -245,19 +247,38 @@ function nbox_ed_moveMarkersVisible(visible)
 	}
 }
 
-/*  Puts the current xmldoc as string to clipboard, opens xml database file editor
+/*  Puts the current xmldoc as string to clipboard, opens xml database file editor if online,
+calls a POST request sender with correct data if offline (for neomanager)
 inputs: none
 return: none
 */
 function nbox_ed_updateXml(openWebEditor=true)
-{
+{	
 	bmco_xml_nodeTextWrite(GLOBAL_xmldoc, bmco_xml_noteGetFirstOfTag(GLOBAL_xmldoc, "updateCount"), String(GLOBAL_updateCount+1));
 	bmco_xml_nodeTextWrite(GLOBAL_xmldoc, bmco_xml_noteGetFirstOfTag(GLOBAL_xmldoc, "updateTimestamp"), bmco_timestamp());	
-	bmco_xml_xmldocTextToClipboard(GLOBAL_xmldoc, gui=false);
-	if (openWebEditor)
-		bmco_urlOpen(SETTING_neocitiesXmlFileEditLink);
-	else // "copy raw xml" button
-		bmco_gui_popupAlert('raw XML copied');
+
+	if (GLOBAL_isOffline)
+	{
+		dataFiles = [
+			{
+				remote_name: "nbox_files/data.xml",
+				type: "xml",
+				contents: bmco_xml_xmldocToString(GLOBAL_xmldoc)
+			}
+		];		
+		bmco_runUpdateForm(dataFiles)
+	}
+	else
+	{
+		bmco_xml_xmldocTextToClipboard(GLOBAL_xmldoc, gui=false);
+		if (openWebEditor)
+			bmco_urlOpen(SETTING_neocitiesXmlFileEditLink);
+		else // "copy raw xml" button
+			bmco_gui_popupAlert('raw XML copied');
+	}
+
+	
+	
 }
 
 /*  loads correct buttons into the main bottom bar.
@@ -271,7 +292,7 @@ function nbox_ed_bottombarLoad(mode="normal", nid=undefined)
 	if (mode == "normal")
 	{
 		nameFnTuples.push(["Copy XML", "nbox_ed_updateXml(false)"]);
-		nameFnTuples.push(["Update XML", "nbox_ed_updateXml()"]);
+		nameFnTuples.push(["Update XML", "nbox_ed_updateXml()"]);		
 	}
 	else if (mode == "moving")
 		nameFnTuples.push(["Cancel", "nbox_ed_noteMoveEnd('"+nid+"')"]);

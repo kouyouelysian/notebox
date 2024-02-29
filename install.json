@@ -13,11 +13,10 @@
         "index.html *if* makeIndex"
     ],
     "items_local": [
-        "nbox_code",
-        "- nbox_code/index.css",
-        "nbox_files",
-        "nbox_style",
+        "nbox_code/editor.js",
+        "nbox_style/nbox_editor.css",
         "nbox_user/settings.js"
+        "info.json"
     ],
-    "editor_page": "editor.html"
+    "editor_page": "editor.offline"
 }

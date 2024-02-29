@@ -293,6 +293,31 @@ function bmco_urlOpen(url, blank=true)
 	a.remove();
 }
 
+/* creates and submits a correct form. to be used with
+offline channel editors instead of copying raw xml to the buffer
+and opening the neocities file editors; the POST action is
+handled by the web app to upload all the user files and convert the
+stuff defined in post data into files and upload them too
+inputs: datafiles <array of dicts> [descriptions of files to be created from POST],
+		chid <string> [valid channel id string, used to return the user to the editor page
+					  offline editor template fills in this attr when rendered when POST is done]
+return: none
+*/
+function bmco_runUpdateForm(datafiles, chid=document.body.getAttribute('chid'))
+{
+	var form = document.createElement("form");
+	form.setAttribute("method", "POST");
+	form.setAttribute("action", "../m/"+chid); // 
+	document.body.appendChild(form);
+
+	var dataFilesInput = document.createElement("input");
+	dataFilesInput.setAttribute("name", "datafiles");
+	dataFilesInput.setAttribute("type", "hidden");
+	dataFilesInput.setAttribute("value", JSON.stringify(datafiles))
+	form.appendChild(dataFilesInput)
+
+	form.submit();
+}
 
 /*  safely parse a string into an integer
 inputs: arg <string> [integerlike string] 
