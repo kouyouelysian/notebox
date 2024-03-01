@@ -19,5 +19,8 @@
         "nbox_user/settings.js",
         "info.json"
     ],
-    "editor_page": "editor.offline"
+    "editor": {
+        "type": "complete",
+        "file": "editor.offline"
+    }
 }
