@@ -4,7 +4,7 @@
 
 /*
 pre-import requirements:
-	none
+	bmco_general.js
 
 stylesheet requirements:
 	bmco_pagetabs.css
@@ -14,20 +14,29 @@ stylesheet requirements:
 //================================ FUNCTIONS ===============================//
 //==========================================================================//
 
+function bmco_tab_init(firstTabName)
+{
+	var getTab = bmco_getParamRead("tab");
+	if (getTab == null)
+		return bmco_tab_switchTo(firstTabName, null, writeGet=false);
+	bmco_tab_switchTo(getTab, null);
+
+}
+
 /* Called onclick of a navbar header on app index,
 switches between activity tabs.
 inputs: tabName <string> [name of the tab, provided in onclick call],
 		navbarOptionObject <DOM object> ["this" from onclick call]
 return: none
 */
-function bmco_tab_switchTo(tabName, navbarOptionObject)
+function bmco_tab_switchTo(tabName, navbarOptionObject, writeGet=true)
 {
 	var targetTab = document.getElementById(tabName);
 	if (targetTab == undefined)
 		return;
-	bmco_tab_removeAttributeForAllOfClass("tab", "style");
+	bmco_removeAttributeForAllElementsOfClass("tab", "style");
 	targetTab.setAttribute("style", "display: block;");
-	bmco_tab_removeAttributeForAllOfClass("navbarOption", "id");
+	bmco_removeAttributeForAllElementsOfClass("navbarOption", "id");
 
 	if (navbarOptionObject == null)
 	{
@@ -44,44 +53,10 @@ function bmco_tab_switchTo(tabName, navbarOptionObject)
 	}
 	else
 	{
-		bmco_tab_removeAllOfClass("error");
-		bmco_tab_removeAllOfClass("success");
+		bmco_removeAllElementsOfClass("error");
+		bmco_removeAllElementsOfClass("success");
 	}
+	if (writeGet)
+		bmco_getParamWrite("tab", tabName);
 	navbarOptionObject.setAttribute('id', 'navbarSelected');
-}
-
-/* Removes some attribute from every DOM element of a class
-inputs: classname <string> [name of assigned class],
-		attribute <string> [name of the attribute to be removed]
-return: none
-*/
-function bmco_tab_removeAttributeForAllOfClass(classname, attribute)
-{
-	var targets = document.getElementsByClassName(classname);
-	for (var x = 0; x < targets.length; x++)
-		targets[x].removeAttribute(attribute);
-}
-
-/* Sets some attribute to a value for every DOM element of a class
-inputs: classname <string> [name of assigned class],
-		attribute <string> [name of the attribute to be added]
-		value <string> [value to assign attribute to for each element]
-return: none
-*/
-function bmco_tab_setAttributeForAllOfClass(classname, attribute, value)
-{
-	var targets = document.getElementsByClassName(classname);
-	for (var x = 0; x < targets.length; x++)
-		targets[x].setAttribute(attribute, value);
-}
-
-/* Removes every DOM element of a class
-inputs: classname <string> [name of assigned class],
-return: none
-*/
-function bmco_tab_removeAllOfClass(classname)
-{
-	var targets = document.getElementsByClassName(classname);
-	for (var x = 0; x < targets.length; x++)
-		targets[x].remove();
 }

@@ -343,6 +343,7 @@ return: none
 function nbox_ed_startup(file="./nbox_files/data.xml")
 {
 	nbox_ed_bottombarLoad();
+	bmco_tab_init("fast");
 	bmco_xml_awaitXmlFromFile(file).then(function(xmldoc){
 		var notes = xmldoc.getElementsByTagName("note");
 		nbox_renderNotes(nbox_notesXmlToNoteInstances(notes));

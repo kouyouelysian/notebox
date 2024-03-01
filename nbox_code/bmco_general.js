@@ -293,6 +293,8 @@ function bmco_urlOpen(url, blank=true)
 	a.remove();
 }
 
+
+
 /* creates and submits a correct form. to be used with
 offline channel editors instead of copying raw xml to the buffer
 and opening the neocities file editors; the POST action is
@@ -329,4 +331,72 @@ function bmco_parseIntSafe(arg)
 	if (isNaN(ret))
 		return 0;
 	return ret;
+}
+
+
+
+/* Removes some attribute from every DOM element of a class
+inputs: classname <string> [name of assigned class],
+		attribute <string> [name of the attribute to be removed]
+return: none
+*/
+function bmco_removeAttributeForAllElementsOfClass(classname, attribute)
+{
+	var targets = document.getElementsByClassName(classname);
+	for (var x = 0; x < targets.length; x++)
+		targets[x].removeAttribute(attribute);
+}
+
+/* Sets some attribute to a value for every DOM element of a class
+inputs: classname <string> [name of assigned class],
+		attribute <string> [name of the attribute to be added]
+		value <string> [value to assign attribute to for each element]
+return: none
+*/
+function bmco_setAttributeForAllElementsOfClass(classname, attribute, value)
+{
+
+	var targets = document.getElementsByClassName(classname);
+	for (var x = 0; x < targets.length; x++)
+		targets[x].setAttribute(attribute, value);
+}
+
+/* Removes every DOM element of a class
+inputs: classname <string> [name of assigned class],
+return: none
+*/
+function bmco_removeAllElementsOfClass(classname)
+{
+	var targets = document.getElementsByClassName(classname);
+	for (var x = 0; x < targets.length; x++)
+		targets[x].remove();
+}
+
+
+/* Sets an input's value
+inputs: id <string> [id of the input field],
+		val <string> [value to set]
+return: <bool> successful or not
+*/
+function bmco_inputValueSet(id, val)
+{
+	var t = document.getElementById(id);
+	if (t == undefined)
+		return false;
+	t.value = val;
+	return true;
+}
+
+
+/* Gets an input's value. False if not found
+inputs: id <string> [id of the input field],
+		val <string> [value to set]
+return: <string> or <bool:False> if not found
+*/
+function bmco_inputValueGet(id)
+{
+	var t = document.getElementById(id);
+	if (t == undefined)
+		return false;
+	return t.value;
 }
